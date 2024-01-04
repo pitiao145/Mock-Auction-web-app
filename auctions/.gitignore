@@ -1,0 +1,7 @@
+#Ignore settings file
+
+./commerce/settings.py
+
+
+#Ignore pycache
+__pycache__
