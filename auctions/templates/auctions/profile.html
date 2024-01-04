@@ -1,0 +1,184 @@
+{% extends 'auctions/layout.html'%}
+{% load static %}
+
+{% block title %}My profile{% endblock%}
+
+{% block body %}
+
+<h1 class="p-2 mb-2 bg-light">My profile</h1>
+<div class="row g-4" style="margin: auto;">
+    <div class="col-3 bg-light">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a aria-current="page" class="nav-link active" href="#" id="profile" data-div="profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a aria-current="page" class="nav-link active" href="#" id="my-auctions" data-div="auctions">My
+                    auctions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="my-wins" data-div="wins">My wins</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="bidding-history" data-div="history">Bidding history</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="settings" data-div="settings">Settings</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-9" style="padding-right: 0;">
+        <div class="info profile">
+            <h2>User Profile</h2>
+            <div class="info-text">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Active Since:</strong> {{ user.date_joined }}</p>
+            </div>
+        </div>
+        <div class="info hidden auctions">
+            <h2>My auctions</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="listing-container">
+                {% for listing in listings %}
+                <div class="col">
+                    <div class="card listing_card bg-light">
+                        <div class="listing_content d-flex flex-column">
+                            <div class="listing_image">
+                                {% if listing.image != "" %}
+                                <img src="{{ listing.image }}" alt="{{ listing.item }}" class="card-img-top">
+                                {% elif listing.image == "" %}
+                                <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="card-img-top">
+                                {% endif %}
+                            </div>
+                            <div class="card-header bg-light border-info">
+                                <h3 class="card-title">
+                                    <strong><a href="{% url 'listing' listing.id %}">{{ listing.item }}</a></strong>
+                                </h3>
+                            </div>
+                            <div class="card-body flex-grow-1">
+                                <div class="listing_description">
+                                    <div class="description_text">
+                                        <p>{{ listing.description }}</p>
+                                    </div>
+                                    <div class="price">
+                                        {% if listing.current_price == 0 %}
+                                        <span class="listing_price">${{ listing.starting_bid }}</span>
+                                        {% else %}
+                                        <span class="listing_price">${{ listing.current_price }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p class="card-text"><small class="text-body-secondary">Posted on {{ listing.date }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>You don't have any listigs yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="info hidden wins">
+            <h2>My wins</h2>
+            <div class="row" id="listing-container">
+                {% for win in wins %}
+                <div class="col">
+                    <div class="card listing_card bg-light">
+                        <div class="listing_content d-flex flex-column">
+                            <div class="listing_image">
+                                {% if win.listing.image != "" %}
+                                <img src="{{ win.listing.image }}" alt="{{ win.listing.item }}" class="card-img-top">
+                                {% elif win.listing.image == "" %}
+                                <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="card-img-top">
+                                {% endif %}
+                            </div>
+                            <div class="card-header bg-light border-info">
+                                <h3 class="card-title">
+                                    <strong><a href="{% url 'listing' win.listing.id %}">{{ win.listing.item }}</a></strong>
+                                </h3>
+                            </div>
+                            <div class="card-body flex-grow-1">
+                                <div class="listing_description">
+                                    <div class="description_text">
+                                        <p>{{ win.listing.description }}</p>
+                                    </div>
+                                    <div class="price">
+                                        {% if win.listing.current_price == 0 %}
+                                        <span class="listing_price">${{ win.listing.starting_bid }}</span>
+                                        {% else %}
+                                        <span class="listing_price">${{ win.listing.current_price }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p class="card-text"><small class="text-body-secondary">Posted on {{ win.listing.date }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>You didn't win any auction yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="info hidden history">
+            <h2>History</h2>
+            <div class="row" id="listing-container">
+                <div class="col">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Listing</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bid in bids %}
+                            <tr>
+                                <td>{{ bid.date }}</td>
+                                <td><a href="{% url 'listing' bid.item.id %}">{{ bid.item.item }}</a></td>
+                                <td>{{ bid.amount }}</td>
+                            </tr>
+                            {% empty %}
+                            <p>You didn't place any bids yet.</p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+        <div class="info hidden settings">
+            <h2>Settings</h2>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const profileLink = document.querySelector('#profile');
+        const auctionsLink = document.querySelector('#my-auctions');
+        const winsLink = document.querySelector('#my-wins');
+        const historyLink = document.querySelector('#bidding-history');
+        const settingsLink = document.querySelector('#settings');
+        const links = [profileLink, auctionsLink, winsLink, historyLink, settingsLink]
+
+        for (const link of links) {
+            link.addEventListener('click', () => {
+                // First hide all the divs
+                const allDivs = document.querySelectorAll('.info')
+                for (const div of allDivs) {
+                    div.style.display = 'none';
+                }
+                // Show the relevant div
+                var target = link.dataset.div;
+                var targetElement = document.querySelector(`.${target}`)
+                // Change the display
+                targetElement.style.display = 'block'
+            })
+        }
+    })
+</script>
+{% endblock %}

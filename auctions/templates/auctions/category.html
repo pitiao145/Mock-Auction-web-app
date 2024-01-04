@@ -1,0 +1,22 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+<div class="row g-4">
+    <div class="col-3">
+        <ul class="nav flex-column">
+            {% for category in categories %}
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'category_list' category.0 %}">{{ category.1 }}</a>
+            </li>
+            {% endfor %}
+        </ul>        
+    </div>
+    <div class="col-9">
+        {% block category %}
+        Here, the items in this category will be displayed
+        {% endblock category %}        
+    </div>
+</div>
+{% endblock body %}

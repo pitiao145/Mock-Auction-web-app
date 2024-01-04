@@ -1,0 +1,6 @@
+{% extends 'auctions/create.html' %}
+{% block title %}Edit <em>{{ listing.item }}</em>{% endblock %}
+{% block form %}
+<form action="{% url 'edit' id %}" method="post">
+{% endblock %}
+{% block button %}Save{% endblock %}

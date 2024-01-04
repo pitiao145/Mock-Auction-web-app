@@ -1,0 +1,109 @@
+{% extends 'auctions/layout.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- <h1>My Watchlist</h1>
+
+<table class="table">
+    <thead>
+        <td>Item</td>
+        <td>Description</td>
+        <td>Price</td>
+        <td>My bid</td>
+    </thead>
+    <tbody>
+        {% for item in watchlist %}
+        <tr>
+            <td><a href="{% url 'listing' item.item.id %}">{{ item.item.item }}</a></td>
+            <td>{{ item.item.description }}</td>
+            <td>{{ item.item.current_price }}</td>
+            <td>
+            {% for bid in bids %}
+                {% if bid.item == item.item %}
+                    {{ bid.amount }}
+                {% endif %}                
+            {% empty %}
+                No bids
+            {% endfor %}
+            </td>
+            <td><a href="{% url 'remove' item.id %}">Remove from watchlist</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> -->
+
+<div class="container mt-5">
+    <div class="watchlist-container">
+        <h1 class="text-center mb-4">My Watchlist</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Item</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>My Bid</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in watchlist %}
+                {% if item.item.active == True %}
+                <tr>
+                    <td>
+                        <div class="listing_image">
+                        {% if item.item.image != "" %}
+                        <img src="{{ item.item.image }}" alt="{{ item.item.item }}" class="card-img-top">
+                        {% elif item.item.image == "" %}
+                        <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="card-img-top">              
+                        {% endif %}    
+                        </div>
+                    </td>
+                    <td><a href="{% url 'listing' item.item.id %}">{{ item.item.item }}</a></td>
+                    <td>{{ item.item.description }}</td>
+                    <td>{{ item.item.current_price }}</td>
+                    <td>
+                        {% for bid in bids %}
+                            {% if bid.item == item.item %}
+                                {{ bid.amount }}
+                            {% endif %}
+                        {% empty %}
+                            No bids
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'remove' item.id %}" class="btn btn-remove">Remove</a>
+                        <a href="{% url 'bid' item.item.id %}" class="btn btn-bid" role="button" id="toggleBidFormWatchlist">Bid</a>
+                        <div id="bidFormWatchlist" style="display: none;">
+                            <form action="{% url 'bid' item.item.id %}" method="post">
+                                {% csrf_token %}
+                                <label for="bid">Your bid:</label>
+                                <input type="number" required name="bid" id="bid" min="{{ item.item.calcMinBid }}" step="1">
+                                <input type="submit" value="Place Bid">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toggleBidButton = document.getElementById('toggleBidFormWatchlist');
+        var bidForm = document.getElementById('bidFormWatchlist');
+
+        toggleBidButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (bidForm.style.display === 'none') {
+                bidForm.style.display = 'block';
+            } else {
+                bidForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

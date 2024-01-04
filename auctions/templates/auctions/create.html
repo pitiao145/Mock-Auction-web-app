@@ -1,0 +1,35 @@
+{% extends 'auctions/layout.html'%}
+
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="form-container">
+        <h1 class="text-center mb-4">{% block title %}Create a new listing{% endblock %}</h1>
+        {% block form %}<form action="{% url 'create' %}" method="post">{% endblock %}
+            {% csrf_token %}
+            <fieldset>
+                <legend>Title</legend>
+                {{ form.title }}
+            </fieldset>
+            <fieldset>
+                <legend>Description</legend>
+                {{ form.description }}
+            </fieldset>
+            <fieldset>
+                <legend>Starting bid</legend>
+                {{ form.start }}
+            </fieldset>
+            <fieldset>
+                <legend>Image URL</legend>
+                {{ form.imgUrl }}
+            </fieldset>
+            <fieldset>
+                <legend>Category</legend>
+                {{ form.category }}
+            </fieldset>
+            <button type="submit" class="btn btn-primary">{% block button %}Create Listing{% endblock %}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

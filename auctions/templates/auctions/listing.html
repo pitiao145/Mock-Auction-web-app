@@ -1,0 +1,154 @@
+{% extends 'auctions/layout.html' %}
+
+{% load static %}
+
+{% block body %} 
+<div class="overlay-content" style="display: none;">
+    {% if user.id == current_winner %}
+    <p>You won this auction.</p>
+    {% elif user.id == listing.user.id %}
+    <p>You closed this auction.</p>
+    {% else %}
+    <p>This listing is not active anymore.</p>
+    {% endif %}
+</div>
+<div class="container listing-page">
+    <div class="listing-content">
+        <div class="row">
+            <div class="col-lg-6">
+                {% if listing.image != "" %}
+                <img src="{{ listing.image }}" alt="{{ listing.item }}" class="img-fluid rounded">
+                {% elif listing.image == "" %}
+                <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="img-fluid rounded">
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="edit">
+                    <h1>{{ listing.item }}</h1>
+                    {% if user.is_authenticated and is_owner %}
+                    <a href="{% url 'edit' listing.id %}" class="btn btn-secondary btn-sm" role="button" style="padding: 2px; font-size: x-small">Edit</a>
+                    {% endif %}
+                </div>
+                <p>{{ listing.description }}</p>
+                <p><strong>Minimum Bid:</strong> {{ listing.starting_bid }}</p>
+                <p><strong>Current Price:</strong> {{ listing.current_price }}</p>
+                <p><em>There are {{ listing.number_of_bids }} bid(s) on this listing.</em></p>
+                {% if current_winner == request.user.id %} <p><strong>You currently have the last bid!</strong></p>{% endif %}
+                <p><strong>Posted by:</strong> {{ listing.user.first_name }} {{ listing.user.last_name }}</p>
+                {% if user.is_authenticated %}
+                <div class="d-flex">
+                    <a href="#" class="btn btn-primary me-3" role="button" id="toggleBidForm">Bid on this item</a>
+                    {% if watchlisted %}
+                    <a href="{% url 'remove' watchlist_id|default_if_none:0 %}"
+                        class="btn btn-danger btn-watchlist me-3" role="button"><span>&times;</span> Remove from
+                        Watchlist</a>
+                    {% else %}
+                    <a href="{% url 'add' listing.id %}" class="btn btn-success btn-watchlist me-3"
+                        role="button"><span>+ </span>Add this item to your watchlist</a>
+                    {% endif %}
+                </div>
+                {% if is_owner %}
+                <form action="{% url 'close' listing.id %}" method="post" class="mt-3">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ current_winner }}" name="winner">
+                    {% if listing.number_of_bids > 0 %}
+                    <button type="submit" class="btn btn-danger">Close Auction</button>
+                    {% else %}
+                    <button type="button" class="btn btn-danger disabled">Close Auction</button>
+                    {% endif %}
+                </form>
+                {% endif %}
+                <div id="bidForm" style="display: none;">
+                    <form action="{% url 'bid' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <label for="bid">Your bid:</label>
+                        <input type="number" required name="bid" id="bid" min="{{ listing.calcMinBid }}" step="1">
+                        <input type="submit" value="Place Bid">
+                    </form>
+                </div>
+                {% if current_winner == user.id and not listing.active %}
+                <p class="mt-3">You've won this auction. This listing is now closed.</p>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="row mt-4">
+            <div class="col-lg-6">
+                <h2>Add Comment</h2>
+                <form action="{% url 'comment' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ user.id }}" name="user">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Your Comment</label>
+                        <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h2>Comments</h2>
+                <div class="comment-feed">
+                    <!-- Comment feed -->
+                    {% for comment in all_comments %}
+                    <div class="comment">
+                        <div class="comment-header">
+                            {% if comment.user == listing.user %}
+                            <strong>{{ comment.user }} <em>(owner)</em></strong>
+                            {% else %}
+                            <strong>{{ comment.user }}</strong>
+                            {% endif %}
+                        </div>
+                        <div class="comment-body">
+                            <p>{{ comment.comment }}</p>
+                            <small class="text-muted">{{ comment.time }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggleBidButton = document.getElementById('toggleBidForm');
+        var bidForm = document.getElementById('bidForm');
+
+        toggleBidButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (bidForm.style.display === 'none') {
+                bidForm.style.display = 'block';
+            } else {
+                bidForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endif %}
+<script>
+    // Check if the listing is not active
+    const isActive = '{{ listing.active }}'; // Replace this with your logic to determine listing status
+
+    if (isActive == 'False') {
+        const listingPage = document.querySelector('.listing-page');
+        const overlayDiv = document.createElement('div');
+        overlayDiv.classList.add('listing-overlay', 'active');
+
+
+        const overlayContent = document.querySelector('.overlay-content')
+        overlayContent.style.display = 'block'
+
+        const listingContent = document.querySelector('.listing-content');
+        listingContent.classList.add('filter');
+
+        listingPage.appendChild(overlayDiv);
+
+        // Disable clicks on the overlay
+        listingPage.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    }
+</script>
+{% endblock %}
+

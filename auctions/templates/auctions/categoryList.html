@@ -1,0 +1,58 @@
+{% extends 'auctions/category.html'%}
+{% load static %}
+
+{% block category %}
+<!-- <ul>
+    {% for item in items %}
+        {% if item.item.active == True %}
+            <li>
+                <a href="{% url 'listing' item.item.id %}">{{ item.item.item}}</a>    
+            </li>
+        {% endif %}
+    {% empty %}
+        No items in this category yet.
+    {% endfor %}
+</ul> -->
+
+<h1>{{ category }}</h1>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="listing-container">
+{% for item in items %}
+    {% if item.item.active == True %}
+    <div class="col">
+        <div class="card listing_card bg-light">
+            <div class="listing_content d-flex flex-column">
+                <div class="listing_image">
+                    {% if item.item.image != "" %}
+                    <img src="{{ item.item.image }}" alt="{{ item.item.item }}" class="card-img-top">
+                    {% elif item.item.image == "" %}
+                    <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="card-img-top">              
+                    {% endif %}    
+                </div>
+                <div class="card-header bg-light border-info">
+                    <h3 class="card-title">
+                        <strong><a href="{% url 'listing' item.item.id %}">{{ item.item.item }}</a></strong>
+                    </h3>
+                </div>
+                <div class="card-body flex-grow-1">
+                    <div class="listing_description">
+                        <div class="description_text"><p>{{ item.item.description }}</p></div>
+                        <div class="price">
+                            {% if item.item.current_price == 0 %}
+                            <span class="listing_price">${{ item.item.starting_bid }}</span>
+                            {% else %}
+                            <span class="listing_price">${{ item.item.current_price }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="listed_by"><p><em>Listed by: {{ item.item.user.first_name }} {{ item.item.user.last_name }}</em></p></div>   
+                    </div>
+                    <p class="card-text"><small class="text-body-secondary">Posted on {{ item.item.date }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% empty %}
+        No items in this category yet.
+{% endfor %}
+</div>
+{% endblock category %}

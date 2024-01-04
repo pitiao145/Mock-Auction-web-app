@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block body %}
+    <h2>Active Listings</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4" id="listing-container">
+    {% for listing in all_listings %}
+    <div class="col">
+        <div class="card listing_card bg-light">
+            <div class="listing_content d-flex flex-column">
+                <div class="listing_image">
+                    {% if listing.image != "" %}
+                    <img src="{{ listing.image }}" alt="{{ listing.item }}" class="card-img-top">
+                    {% elif listing.image == "" %}
+                    <img src="{% static 'auctions/CS50logo.png' %}" alt="CS50 logo" class="card-img-top">              
+                    {% endif %}    
+                </div>
+                <div class="card-header bg-light border-info">
+                    <h3 class="card-title">
+                        <strong><a href="{% url 'listing' listing.id %}">{{ listing.item }}</a></strong>
+                    </h3>
+                </div>
+                <div class="card-body flex-grow-1">
+                    <div class="listing_description">
+                        <div class="description_text"><p>{{ listing.description }}</p></div>
+                        <div class="price">
+                            {% if listing.current_price == 0 %}
+                            <span class="listing_price">${{ listing.starting_bid }}</span>
+                            {% else %}
+                            <span class="listing_price">${{ listing.current_price }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="listed_by"><p><em>Listed by: {{ listing.user.first_name }} {{ listing.user.last_name }}</em></p></div>   
+                    </div>
+                    <p class="card-text"><small class="text-body-secondary">Posted on {{ listing.date }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+    
+
+{% endblock %}

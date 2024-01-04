@@ -1,0 +1,481 @@
+body {
+    padding: 10px;
+    max-width: 1248px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div, h1, header, nav{
+    border-radius: 5px;
+}
+
+/* Navigation */
+header {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#CS50_img {
+    max-width: 100px;
+    height: auto;
+}
+
+#navbarSupportedContent {
+    display: block !important;
+}
+
+#searchBarItems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#searchBarItems input {
+    flex: 2;
+}
+#searchBarItems select, #searchBarItems button {
+    flex: 1;
+    width: 100%;
+}
+
+/* Media queries for smaller screens */
+
+@media (max-width: 620px){
+    #searchBarItems select{
+        display: none;
+    }
+}
+@media (max-width: 991.98px) {
+    #navigation ul.navbar-nav, #navigation .navbar-brand {
+        display: none;
+        /* Hide the navbar-nav on smaller screens */
+    }
+}
+
+/* Media query for larger screens */
+@media (min-width: 992px) {
+    #navigation ul.navbar-nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #navigation .collapse {
+        display: block !important;
+    }
+}
+
+/* Index page */
+
+.col {
+    margin-bottom: 20px;
+}
+
+.listing_card {
+    height: 100%;
+    /* max-width: 300px; Adjust the max-width for smaller viewport */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.listing_content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.listing_image {
+    flex: 1.5;
+    overflow: hidden;
+    position: relative;
+}
+
+.listing_image img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.card-header {
+    flex: 0 0 auto;
+}
+
+.card-title {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.card-body,
+.listing_description {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.description_text {
+    flex-grow: 1;
+    /* Let the text expand and wrap within the available space */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* For small and medium screens, allow full text with no truncation */
+    -webkit-line-clamp: 2;
+    white-space: normal;
+    text-overflow: ellipsis;
+}
+
+.listing_price {
+    font-size: larger;
+    font-weight: 700;
+    display: block;
+    margin: 5px;
+}
+
+@media (min-width: 768px) {
+
+    /* For medium devices and above */
+    .listing_card_GPT {
+        min-height: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+
+    /* For large devices and above */
+    .listing_card {
+        min-height: 100%;
+    }
+
+    .description_text {
+        /* For larger screens, truncate text after 3 lines */
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* For small devices */
+    .listing_card {
+        max-width: 300px;
+        max-height: 500px;
+    }
+}
+
+/* Listing page */
+/* Button for watchlist with cross sign */
+.btn-watchlist {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.edit{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-watchlist span {
+    margin-right: 5px;
+}
+
+.add_item {
+    text-decoration: none;
+    color: inherit;
+}
+
+.col-lg-6 img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Keeps the whole image visible within the container */
+}
+
+/* Listing page with inactive listing */
+.listing-page {
+    position: relative;
+}
+
+.listing-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.705);
+    /* Adjust opacity here */
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    z-index: 999;
+    border-radius: 2rem;
+}
+
+.filter {
+    filter: blur(5px);
+}
+
+.listing-overlay.active {
+    display: block;
+}
+
+.overlay-content {
+    filter: none;
+    z-index: 1000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+}
+
+
+/* Comment section */
+
+.comment-feed {
+    max-height: 400px;
+    /* Adjust the maximum height of the comment feed */
+    overflow-y: auto;
+    /* Enable vertical scroll if comments exceed max height */
+}
+
+.comment {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    /* Light background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+.comment-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.comment-body {
+    color: #555;
+    margin-top: 8px;
+}
+
+.comment-body small {
+    display: block;
+    font-size: 0.8rem;
+    /* Adjust font size as needed */
+    margin-top: 5px;
+    color: #888;
+    /* Adjust color to your preference */
+}
+
+/* Styles for the Add Comment form */
+.add-comment-form {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.add-comment-form textarea {
+    resize: none;
+}
+
+.add-comment-form button[type="submit"] {
+    margin-top: 10px;
+}
+
+/* Create new listing form */
+
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ababab75;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.form-container fieldset {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #ece7e7;
+}
+
+.form-container legend {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container textarea,
+.form-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    margin-bottom: 10px;
+}
+
+.form-container button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.form-container button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Watchlist */
+.watchlist-container {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.watchlist-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.watchlist-container th {
+    text-align: center;
+}
+
+.watchlist-container td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.watchlist-container th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.watchlist-container td a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.watchlist-container td a:hover {
+    text-decoration: underline;
+}
+
+.watchlist-container .btn {
+    width: 100%;
+    padding: 6px 12px;
+    margin-bottom: 6px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.watchlist-container .btn-remove {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+.watchlist-container .btn-bid {
+    background-color: #007bff;
+    margin-left: 10px;
+}
+
+.watchlist-container .btn:hover {
+    background-color: #0056b3;
+}
+
+.watchlist-container .btn-remove:hover {
+    background-color: #c82333;
+}
+
+/* Bid form */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* My profile section */
+.info {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #ebe9e9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.info h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.info-text p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.profile-info strong {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #333;
+}
+
+.hidden{
+    display: none;
+}
