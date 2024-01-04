@@ -73,8 +73,8 @@
                     </td>
                     <td>
                         <a href="{% url 'remove' item.id %}" class="btn btn-remove">Remove</a>
-                        <a href="{% url 'bid' item.item.id %}" class="btn btn-bid" role="button" id="toggleBidFormWatchlist">Bid</a>
-                        <div id="bidFormWatchlist" style="display: none;">
+                        <a href="#" class="btn btn-bid" role="button" onclick="showBidForm('{{item.id}}')">Bid</a>
+                        <div id="{{item.id}}" style="display: none;">
                             <form action="{% url 'bid' item.item.id %}" method="post">
                                 {% csrf_token %}
                                 <label for="bid">Your bid:</label>
@@ -92,18 +92,16 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var toggleBidButton = document.getElementById('toggleBidFormWatchlist');
-        var bidForm = document.getElementById('bidFormWatchlist');
 
-        toggleBidButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            if (bidForm.style.display === 'none') {
-                bidForm.style.display = 'block';
-            } else {
-                bidForm.style.display = 'none';
-            }
-        });
-    });
+    function showBidForm(idString){
+        var bidForm = document.getElementById(idString);
+
+        if (bidForm.style.display === 'none') {
+            bidForm.style.display = 'block';
+        } else {
+            bidForm.style.display = 'none';
+        }
+    }
+
 </script>
 {% endblock %}

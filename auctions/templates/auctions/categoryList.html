@@ -2,17 +2,6 @@
 {% load static %}
 
 {% block category %}
-<!-- <ul>
-    {% for item in items %}
-        {% if item.item.active == True %}
-            <li>
-                <a href="{% url 'listing' item.item.id %}">{{ item.item.item}}</a>    
-            </li>
-        {% endif %}
-    {% empty %}
-        No items in this category yet.
-    {% endfor %}
-</ul> -->
 
 <h1>{{ category }}</h1>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="listing-container">
